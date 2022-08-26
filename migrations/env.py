@@ -33,6 +33,16 @@ target_metadata = current_app.extensions['migrate'].db.metadata
 # ... etc.
 
 
+exclude_tables = config.get_section('alembic:exclude').get('tables', '').split(',')
+
+
+def include_object(object, name, type_, reflected, compare_to):
+    if type_ == "table" and name in exclude_tables:
+        return False
+    else:
+       return True
+
+
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -47,7 +57,7 @@ def run_migrations_offline():
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True
+        url=url, target_metadata=target_metadata, literal_binds=True, include_object=include_object
     )
 
     with context.begin_transaction():
@@ -83,7 +93,8 @@ def run_migrations_online():
             connection=connection,
             target_metadata=target_metadata,
             process_revision_directives=process_revision_directives,
-            **current_app.extensions['migrate'].configure_args
+            **current_app.extensions['migrate'].configure_args,
+            include_object=include_object
         )
 
         with context.begin_transaction():
