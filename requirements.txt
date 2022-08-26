@@ -34,7 +34,7 @@ MarkupSafe==1.1.1
 marshmallow==3.10.0
 marshmallow-sqlalchemy==0.24.2
 phonenumbers==8.12.49
-psycopg2-binary==2.8.6
+psycopg2-binary==2.9.3
 pycparser==2.20
 PyJWT==2.0.1
 python-dateutil==2.8.1
